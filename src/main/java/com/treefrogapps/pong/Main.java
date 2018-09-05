@@ -13,7 +13,6 @@ public class Main extends Application {
 
     public final static Logger LOGGER = Logger.getLogger("PongLogger");
 
-
     @Inject PongView pongView;
     @Inject PongController pongController;
 
@@ -22,7 +21,6 @@ public class Main extends Application {
     }
 
     @Override public void start(Stage primaryStage) {
-
         DaggerMainComponent.builder().build().inject(this);
         pongView.attachStage(primaryStage);
         pongController.attachView(pongView);
@@ -30,6 +28,7 @@ public class Main extends Application {
 
     @Override
     public void stop() {
-        pongController.onShutdown();
+        pongController.detachView();
+        pongView.detachStage();
     }
 }

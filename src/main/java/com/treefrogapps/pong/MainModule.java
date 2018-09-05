@@ -1,16 +1,17 @@
 package com.treefrogapps.pong;
 
-import com.treefrogapps.pong.model.ModelModule;
-import com.treefrogapps.pong.view.ViewModule;
-import com.treefrogapps.pong.view.ui.GameBoard;
 import dagger.Module;
 import dagger.Provides;
 
 import javax.inject.Singleton;
 
-@Module(includes = {ModelModule.class, ViewModule.class}) class MainModule {
+@Module abstract class MainModule {
 
-    @Provides @Singleton static GameBoard provideGameBoard() {
-        return new GameBoard();
+    private static final int WIDTH = 1200;
+    private static final int HEIGHT = 600;
+    private static final double BALL_SIZE = 16.0d;
+
+    @Provides @Singleton static SceneMetrics sceneMetrics() {
+        return new SceneMetrics(WIDTH, HEIGHT, BALL_SIZE);
     }
 }

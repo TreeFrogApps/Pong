@@ -1,80 +1,66 @@
 package com.treefrogapps.pong.view;
 
-import com.treefrogapps.pong.base.View;
-import com.treefrogapps.pong.model.BallMetrics;
-import com.treefrogapps.pong.model.GameState;
+import com.treefrogapps.pong.SceneMetrics;
+import com.treefrogapps.pong.common.View;
 import com.treefrogapps.pong.model.PongModelViewOps;
-import com.treefrogapps.pong.model.Score;
 import com.treefrogapps.pong.view.ui.GameBoard;
+import com.treefrogapps.pong.view.ui.PaddleCollision;
 import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
 
-@Singleton public class PongView implements View<GameBoard> {
+import static com.treefrogapps.pong.util.RxUtils.dispose;
 
-    private static final int WIDTH = 1200;
-    private static final int HEIGHT = 600;
+@Singleton public class PongView implements View {
 
     private final GameBoard gameBoard;
     private final PongModelViewOps modelViewOps;
-    private final ExecutorService gameExecutorService;
-    private final long frameInterval;
-    private Stage primaryStage;
+    private final SceneMetrics metrics;
 
-    @Inject PongView(GameBoard gameBoard, PongModelViewOps modelViewOps, ExecutorService gameThreadExecutor, long frameInterval) {
+    private Stage primaryStage;
+    private CompositeDisposable disposable;
+
+    @Inject PongView(GameBoard gameBoard,
+                     PongModelViewOps modelViewOps,
+                     SceneMetrics metrics) {
+
         this.gameBoard = gameBoard;
         this.modelViewOps = modelViewOps;
-        this.gameExecutorService = gameThreadExecutor;
-        this.frameInterval = frameInterval;
-    }
-
-    @Override public GameBoard getPane() {
-        return gameBoard;
+        this.metrics = metrics;
     }
 
     @Override public void attachStage(Stage stage) {
         this.primaryStage = stage;
 
         stage.setResizable(false);
-        stage.setScene(new Scene(gameBoard, WIDTH, HEIGHT));
+        stage.setScene(new Scene(gameBoard, metrics.getWidth(), metrics.getHeight()));
         stage.setTitle(modelViewOps.titleText());
         stage.show();
 
-        gameBoard.setupBoard();
+        gameBoard.setupBoard(metrics.getBallSize());
 
-        modelViewOps.scoreUpdates().subscribe(this::scoreUpdates);
-        modelViewOps.gameTextUpdates().subscribe(this::setGameText);
-        modelViewOps.gameStateUpdates().subscribe(this::gameStateUpdate);
-        modelViewOps.ballMetricsUpdates().subscribe(this::ballMetricsUpdate);
+        disposable = new CompositeDisposable();
+        disposable.addAll(
+                modelViewOps.scoreUpdates().subscribe(gameBoard::setScores),
+                modelViewOps.gameTextUpdates().subscribe(gameBoard::setGameText));
+
+        modelViewOps.setOnBallMovedListener(gameBoard::setBallPosition);
+    }
+
+    @Override public void detachStage() {
+        dispose(disposable);
     }
 
     @Override public Optional<Stage> getStage() {
         return Optional.ofNullable(primaryStage);
     }
 
-    public Observable<PaddleCollision> observablePaddleCollisions(){
+    public Observable<PaddleCollision> observablePaddleCollisions() {
         return gameBoard.paddleCollisions();
-    }
-
-    private void scoreUpdates(Score scores){
-        gameBoard.setScores(scores);
-    }
-
-    private void setGameText(@Nonnull String headerText) {
-        gameBoard.setGameText(headerText);
-    }
-
-    private void gameStateUpdate(GameState gameState) {
-        // TODO - proxy to gameboard
-    }
-
-    private void ballMetricsUpdate(BallMetrics ballMetrics){
-        // TODO - proxy to gameboard (gameboard has game thread and ui thread)
     }
 }

@@ -11,6 +11,6 @@ class ScoreText extends Text {
         super(text);
 
         setFill(Color.WHITE);
-        setFont(Font.font("Verdana", FontWeight.BOLD,52.0d));
+        setFont(Font.font("Courier New", FontWeight.BOLD,52.0d));
     }
 }

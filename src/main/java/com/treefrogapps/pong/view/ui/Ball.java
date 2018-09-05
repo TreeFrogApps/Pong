@@ -5,11 +5,11 @@ import javafx.scene.shape.Rectangle;
 
 class Ball extends Rectangle {
 
-    private static final double SIZE = 16.0d;
+    Ball(double size) {
+        super();
 
-    Ball() {
-        setWidth(SIZE);
-        setHeight(SIZE);
+        setWidth(size);
+        setHeight(size);
         setFill(Color.WHITE);
     }
 }

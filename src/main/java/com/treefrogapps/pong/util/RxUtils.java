@@ -1,4 +1,4 @@
-package com.treefrogapps.pong.base;
+package com.treefrogapps.pong.util;
 
 import io.reactivex.disposables.Disposable;
 

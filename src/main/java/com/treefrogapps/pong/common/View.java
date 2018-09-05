@@ -1,15 +1,14 @@
-package com.treefrogapps.pong.base;
+package com.treefrogapps.pong.common;
 
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.util.Optional;
 
-public interface View<P extends Pane> {
-
-    P getPane();
+public interface View {
 
     void attachStage(Stage stage);
+
+    void detachStage();
 
     Optional<Stage> getStage();
 }

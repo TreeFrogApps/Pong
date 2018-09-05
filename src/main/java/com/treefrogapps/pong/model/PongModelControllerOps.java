@@ -1,16 +1,17 @@
 package com.treefrogapps.pong.model;
 
-import com.treefrogapps.pong.view.PaddleCollision;
+import com.treefrogapps.pong.view.ui.PaddleCollision;
 
+/**
+ * Interface for Model-Controller Operations
+ */
 public interface PongModelControllerOps {
 
-    void startGame(double maxX, double maxY, double ballSize);
-
-    void pauseGame();
+    void startGame();
 
     void resetGame();
 
-    void shutdownGame();
+    void finish();
 
     void paddleCollision(PaddleCollision collision);
 }
