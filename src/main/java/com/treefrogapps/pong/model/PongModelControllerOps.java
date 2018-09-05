@@ -11,6 +11,8 @@ public interface PongModelControllerOps {
 
     void resetGame();
 
+    void pauseGame();
+
     void finish();
 
     void paddleCollision(PaddleCollision collision);

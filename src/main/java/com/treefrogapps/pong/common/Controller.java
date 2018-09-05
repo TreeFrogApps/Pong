@@ -1,7 +1,6 @@
 package com.treefrogapps.pong.common;
 
 import io.reactivex.annotations.NonNull;
-import javafx.scene.layout.Pane;
 
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -21,9 +20,9 @@ public abstract class Controller<V extends View> {
         onViewAttached(view);
     }
 
-    public void detachView(){
+    public void detachView() {
         tasks.clear();
-        if(view != null) {
+        if (view != null) {
             onViewDetached(view);
             view = null;
         }
@@ -31,11 +30,6 @@ public abstract class Controller<V extends View> {
 
     protected void ifAttached(Consumer<V> consumer) {
         if (view != null) consumer.accept(view);
-    }
-
-    protected void whenAttached(Consumer<V> consumer) {
-        if (view == null) tasks.offer(consumer);
-        else consumer.accept(view);
     }
 
     protected abstract void onViewAttached(@NonNull V view);

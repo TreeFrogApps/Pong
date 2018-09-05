@@ -2,16 +2,12 @@ package com.treefrogapps.pong;
 
 import com.treefrogapps.pong.controller.PongController;
 import com.treefrogapps.pong.view.PongView;
-import io.reactivex.schedulers.Schedulers;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 import javax.inject.Inject;
-import java.util.logging.Logger;
 
 public class Main extends Application {
-
-    public final static Logger LOGGER = Logger.getLogger("PongLogger");
 
     @Inject PongView pongView;
     @Inject PongController pongController;

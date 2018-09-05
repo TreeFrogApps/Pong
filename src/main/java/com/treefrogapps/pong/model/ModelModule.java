@@ -1,5 +1,6 @@
 package com.treefrogapps.pong.model;
 
+import com.treefrogapps.pong.common.TriFunction;
 import com.treefrogapps.pong.view.ui.PaddleCollision;
 import dagger.Binds;
 import dagger.Module;
@@ -11,7 +12,6 @@ import java.net.URISyntaxException;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -25,6 +25,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
     private static final int FPS = 30;
     private static final int MAX_VELOCITY = 600; // pixels per second
     private static final int MIN_VELOCITY = 400; // pixels per second
+    private static final int MAX_VELOCITY_INCREASE = 400;
     private static final int MAX_ANGLE = 60; // in degrees
 
     @Provides @Singleton static ExecutorService gameThreadExecutor() {
@@ -60,17 +61,17 @@ import static java.util.concurrent.TimeUnit.SECONDS;
         };
     }
 
-    @Provides @Singleton static BiFunction<BallMetrics, PaddleCollision, BallMetrics> paddleCollisionMetricsProvider() {
-        return (metrics, collision) -> {
+    @Provides @Singleton static TriFunction<BallMetrics, PaddleCollision, Integer> paddleCollisionMetricsProvider() {
+        return (metrics, collision, velIncrease) -> {
             final double yPos = collision.getPosY();
             final boolean isLeftPaddle = collision.isLeftPaddle();
 
-            final int velocity = Math.max(Math.abs((int) (yPos * MAX_VELOCITY)), MIN_VELOCITY);
+            final int velocity = Math.max(Math.abs((int) (yPos * MAX_VELOCITY)), MIN_VELOCITY) +
+                    Math.min(velIncrease, MAX_VELOCITY_INCREASE);
             final int angle = createAngle(isLeftPaddle, yPos);
 
             metrics.ballVelocity = velocity;
             metrics.ballAngle = angle;
-            return metrics;
         };
     }
 
@@ -78,14 +79,14 @@ import static java.util.concurrent.TimeUnit.SECONDS;
         // yPos between -1 to 1 (normalised)
         if (yPos <= 0.0d) {
             // upper half - work out angle based on quadrant 1 & 2 (left / right paddle)
-            return isLeftPaddle ? Math.abs((int) (yPos * MAX_ANGLE)) : Math.abs(180 - ((int) (yPos * MAX_ANGLE)));
+            return isLeftPaddle ? Math.abs((int) (yPos * MAX_ANGLE)) : 180 - Math.abs(((int) (yPos * MAX_ANGLE)));
         } else {
             // lower half - work out angle based on quadrant 3 & 4 (left / right paddle)
             return isLeftPaddle ? 360 - ((int) (yPos * MAX_ANGLE)) : 180 + ((int) (yPos * MAX_ANGLE));
         }
     }
 
-    @Provides @Singleton static AudioClip collisionSound(){
+    @Provides @Singleton static AudioClip collisionSound() {
         try {
             return new AudioClip(ModelModule.class.getResource("/collision.wav").toURI().toString());
         } catch (URISyntaxException e) {
