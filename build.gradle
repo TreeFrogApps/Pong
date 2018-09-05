@@ -1,7 +1,22 @@
-plugins { id "net.ltgt.apt" version "0.10" }
+buildscript {
+    dependencies {
+        // https://github.com/FibreFoX/javafx-gradle-plugin
+        classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.8.2'
+    }
 
-apply plugin: "net.ltgt.apt"
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+plugins {
+    id "net.ltgt.apt" version "0.10"
+}
+
 apply plugin: 'java'
+apply plugin: "net.ltgt.apt"
+apply plugin: 'javafx-gradle-plugin'
 apply plugin: 'idea'
 
 repositories {
@@ -15,10 +30,16 @@ targetCompatibility = 1.8
 dependencies {
     def daggerVersion = "2.14.1"
 
-    implementation 'com.google.code.findbugs:jsr305:3.0.0'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
-    implementation "com.google.dagger:dagger:$daggerVersion"
+    compile 'com.google.code.findbugs:jsr305:3.0.0'
+    compile 'io.reactivex.rxjava2:rxjava:2.1.9'
+    compile "com.google.dagger:dagger:$daggerVersion"
     apt "com.google.dagger:dagger-compiler:$daggerVersion"
 
     testImplementation group: 'junit', name: 'junit', version: '4.12'
+}
+
+jfx {
+    mainClass = 'com.treefrogapps.pong.Main'
+    vendor = 'Mark'
+    skipCopyingDependencies = false
 }
