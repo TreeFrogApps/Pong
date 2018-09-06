@@ -39,7 +39,12 @@ dependencies {
 }
 
 jfx {
-    mainClass = 'com.treefrogapps.pong.Main'
-    vendor = 'Mark'
-    skipCopyingDependencies = false
+    mainClass = 'com.treefrogapps.pong.Pong'
+    vendor = 'TreeFrogApps'
+    jfxMainAppJarName = "Pong.jar"
+    deployDir = "src/main/deploy"
+
+    // gradle jfxNative
+    bundler = "ALL"
+    appName = "pong"
 }

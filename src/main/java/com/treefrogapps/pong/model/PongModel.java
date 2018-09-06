@@ -119,7 +119,7 @@ import static java.lang.Thread.sleep;
     @Override public void paddleCollision(PaddleCollision collision) {
         synchronized (ballMetrics) {
             collisionSound.play();
-            paddleCollisionBallMetricsFunction.apply(ballMetrics, collision, velocityIncrease += 10);
+            paddleCollisionBallMetricsFunction.apply(ballMetrics, collision, velocityIncrease += 20);
         }
     }
 
@@ -198,11 +198,11 @@ import static java.lang.Thread.sleep;
     }
 
     private boolean playerHasScored() {
-        if (ballMetrics.ballX < 5) {
+        if (ballMetrics.ballX <= 0) {
             scoreUpdates.onNext(Score.incrementRight(scoreUpdates.getValue()));
             startBallMetrics();
             return true;
-        } else if (ballMetrics.ballX > metrics.getWidth() - 5) {
+        } else if (ballMetrics.ballX >= metrics.getWidth() - metrics.getBallSize()) {
             scoreUpdates.onNext(Score.incrementLeft(scoreUpdates.getValue()));
             startBallMetrics();
             return true;

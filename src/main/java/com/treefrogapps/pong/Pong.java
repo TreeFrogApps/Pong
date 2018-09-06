@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 
 import javax.inject.Inject;
 
-public class Main extends Application {
+public class Pong extends Application {
 
     @Inject PongView pongView;
     @Inject PongController pongController;
@@ -17,7 +17,7 @@ public class Main extends Application {
     }
 
     @Override public void start(Stage primaryStage) {
-        DaggerMainComponent.builder().build().inject(this);
+        DaggerPongComponent.builder().build().inject(this);
         pongView.attachStage(primaryStage);
         pongController.attachView(pongView);
     }

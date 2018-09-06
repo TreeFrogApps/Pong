@@ -113,7 +113,7 @@ import java.util.Arrays;
         final double maxRY = minRY + rightPaddle.getHeight();
 
         Platform.runLater(() -> {
-            if (x <= leftPaddleEdge && y >= minLY && y <= maxLY && leftPaddle != activePaddle) {
+            if (x <= leftPaddleEdge && (y + ball.getHeight()) >= minLY && y <= maxLY && leftPaddle != activePaddle) {
                 ball.setX(leftPaddleEdge);
                 ball.setY(y);
                 activePaddle = leftPaddle;
@@ -121,7 +121,7 @@ import java.util.Arrays;
                 rightPaddle.setFill(Color.WHITE);
                 collisionSubject.onNext(new PaddleCollision(normaliseYPos(minLY, maxLY, y), true));
 
-            } else if (x + ball.getWidth() >= rightPaddleEdge && y >= minRY && y <= maxRY && rightPaddle != activePaddle) {
+            } else if (x + ball.getWidth() >= rightPaddleEdge && (y + ball.getHeight()) >= minRY && y <= maxRY && rightPaddle != activePaddle) {
                 ball.setX(rightPaddleEdge - ball.getWidth());
                 ball.setY(y);
                 activePaddle = rightPaddle;

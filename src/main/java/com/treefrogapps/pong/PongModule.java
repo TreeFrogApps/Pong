@@ -5,7 +5,7 @@ import dagger.Provides;
 
 import javax.inject.Singleton;
 
-@Module abstract class MainModule {
+@Module abstract class PongModule {
 
     private static final int WIDTH = 1200;
     private static final int HEIGHT = 600;

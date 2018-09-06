@@ -25,7 +25,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
     private static final int FPS = 30;
     private static final int MAX_VELOCITY = 600; // pixels per second
     private static final int MIN_VELOCITY = 400; // pixels per second
-    private static final int MAX_VELOCITY_INCREASE = 400;
+    private static final int MAX_VELOCITY_INCREASE = 600;
     private static final int MAX_ANGLE = 60; // in degrees
 
     @Provides @Singleton static ExecutorService gameThreadExecutor() {

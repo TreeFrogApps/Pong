@@ -6,7 +6,7 @@ import dagger.Component;
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = {MainModule.class, ModelModule.class}) public interface MainComponent {
+@Component(modules = {PongModule.class, ModelModule.class}) public interface PongComponent {
 
-    void inject(Main main);
+    void inject(Pong pong);
 }
